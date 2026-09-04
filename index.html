@@ -51,6 +51,14 @@ html { scroll-behavior: smooth; }
     letter-spacing: 0.2px;
 }
 
+/* ===== 프로필 카드 ===== */
+.ovi-profile { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 16px; }
+.ovi-profile .avatar {
+    width: 128px; height: 128px; border-radius: 50%; object-fit: cover;
+    border: 3px solid #fff; box-shadow: 0 5px 14px rgba(190,130,70,0.16); flex: 0 0 auto;
+}
+.ovi-profile .info p { margin: 4px 0; font-size: 13.5px; font-weight: 500; line-height: 1.7; color: var(--sub); }
+
 /* ===== 상단 안내 문구 ===== */
 .ovi-intro {
     text-align: center;
@@ -69,11 +77,10 @@ html { scroll-behavior: smooth; }
 .ovi-legend .empty { border: 1.5px solid #ecc99a; }
 .ovi-legend .wait  { border: 1.5px solid var(--accent); box-shadow: inset 0 0 0 2px #fff, inset 0 0 0 3.5px var(--accent); }
 .ovi-legend .done  { background: var(--accent); }
-.ovi-month { display:flex; justify-content:center; gap:50px; flex-wrap:wrap; }
-.ovi-month .m { text-align:center; font-size:12.5px; font-weight:600; }
-.ovi-month .m .cap { display:block; margin-bottom:8px; font-size:13.5px; font-weight:700; }
-.ovi-month .m .dotrow { font-size:17px; letter-spacing:5px; color: var(--accent); }
-.ovi-month .m .nick { display:block; margin-top:6px; font-size:11.5px; font-weight:600; color: var(--sub); }
+.ovi-slot-free { text-align:center; font-size: 26px; letter-spacing: 12px; }
+.ovi-slot-free .dot.empty { color: #ecc99a; }
+.ovi-slot-free .dot.wait  { color: var(--accent); }
+.ovi-slot-free .dot.done  { color: var(--accent); }
 
 /* ===== 공지사항 ===== */
 .ovi-list { list-style:none; margin:0; padding:0; text-align:left; }
@@ -98,25 +105,48 @@ html { scroll-behavior: smooth; }
 .ovi-note { font-size: 12px; color: var(--sub); line-height: 1.8; text-align:left; padding-top: 10px; border-top: 1px dashed #f0e2d2; }
 .ovi-note b { color: var(--pink-deep); font-weight: 700; }
 
-/* ===== 포트폴리오 (매이슨리 + 더보기) ===== */
-.ovi-portfolio-grid {
-    column-count: 2;
+/* ===== 포트폴리오 (매이슨리 + 더보기, 순서 그대로 · 캡션/영상 지원) ===== */
+.ovi-pf-feed {
+    column-count: 1;
     column-gap: 14px;
 }
 @media (min-width: 640px) {
-    .ovi-portfolio-grid { column-count: 3; }
+    .ovi-pf-feed { column-count: 2; }
 }
-.ovi-portfolio-grid img {
-    width: 100%;
-    margin-bottom: 14px;
-    border-radius: 12px;
+@media (min-width: 960px) {
+    .ovi-pf-feed { column-count: 3; }
+}
+.ovi-pf-item {
     break-inside: avoid;
+    margin-bottom: 14px;
+}
+.ovi-pf-item.ovi-more-hidden { display: none; }
+.ovi-pf-item img {
+    width: 100%;
+    border-radius: 12px;
     box-shadow: 0 3px 12px rgba(190,130,70,0.12);
     cursor: zoom-in;
     background:#fdf6ec;
-    transition: opacity 0.2s ease;
+    display:block;
 }
-.ovi-portfolio-grid img.ovi-more-hidden { display: none; }
+.ovi-pf-caption {
+    text-align:center;
+    font-size:12px;
+    color: #bbbbbb;
+    margin-top: 6px;
+}
+.ovi-pf-video {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 */
+    border-radius: 12px;
+    overflow: hidden;
+    background:#000;
+}
+.ovi-pf-video iframe {
+    position: absolute;
+    top:0; left:0; width:100%; height:100%; border:0;
+}
 .ovi-more-wrap { text-align:center; margin-top: 6px; }
 .ovi-more-btn {
     display:inline-block;
@@ -194,6 +224,18 @@ html { scroll-behavior: smooth; }
 
 <div class="ovi">
 
+    <!-- ===== 작가 소개 ===== -->
+    <!-- 프로필 사진 주소와 소개 문구만 자유롭게 바꿔주세요 -->
+    <div class="ovi-card ovi-profile">
+        <img class="avatar" src="여기에_프로필사진_주소" alt="작가 프로필">
+        <div class="info">
+            <div class="ovi-title" style="margin-bottom:12px;"><span class="ovi-star">★</span>작가 소개<span class="ovi-star">★</span></div>
+            <p>안녕하세요. 일러스트레이터 오브입니다!</p>
+            <p>매력적이고 깔끔한 스타일의 디자인을 원하신다면 언제든 찾아주세요!</p>
+            <p>모든 문의 환영합니다 :)</p>
+        </div>
+    </div>
+
     <!-- ===== 상단 안내 문구 ===== -->
     <div class="ovi-intro">
         해당 타입은 간단 타입의 커미션으로 조금 러프하게, 복잡한 디자인은 생략되어 작업됩니다.<br>
@@ -201,6 +243,11 @@ html { scroll-behavior: smooth; }
     </div>
 
     <!-- ===== 작업 현황 ===== -->
+    <!-- 동그라미를 자유롭게 추가/삭제하세요! 아래 .ovi-slot-free 안의 <span>...</span> 한 칸이 슬롯 한 개입니다.
+         - 비어있는 슬롯: <span class="dot empty">○</span>
+         - 예약/대기중 슬롯: <span class="dot wait">◎</span>
+         - 마감/작업중 슬롯: <span class="dot done">●</span>
+         한 줄에 복사해서 붙여넣거나 지우면서 원하는 개수만큼 자유롭게 조절하시면 됩니다. -->
     <div id="work"></div>
     <div class="ovi-card">
         <div class="ovi-title"><span class="ovi-star">★</span>작업 현황<span class="ovi-star">★</span></div>
@@ -209,9 +256,10 @@ html { scroll-behavior: smooth; }
             <span><span class="circle wait"></span>예약 / 대기중</span>
             <span><span class="circle done"></span>마감 / 작업중</span>
         </div>
-        <!-- 자동으로 현재 달부터 3개월이 계산되어 표시됩니다 -->
-        <div class="ovi-month" id="oviSlotContainer">
-            <!-- 자바스크립트에 의해 자동 생성됩니다 -->
+        <div class="ovi-slot-free">
+            <span class="dot done">●</span>
+            <span class="dot wait">◎</span>
+            <span class="dot wait">◎</span>
         </div>
     </div>
 
@@ -253,26 +301,70 @@ html { scroll-behavior: smooth; }
         </div>
     </div>
 
-    <!-- ===== 포트폴리오 (매이슨리 그리드 + 더보기 + 확대보기) ===== -->
-    <!-- 사진 추가/삭제/교체 방법: 아래 .ovi-portfolio-grid 안에 <img src="사진주소"> 한 줄씩만 있으면 됩니다.
-         사진 사이즈가 제각각이어도 자동으로 자연스럽게 배치돼요.
-         처음엔 9장만 보이고 "더보기"를 누르면 다음 9장씩 펼쳐집니다 (INITIAL_COUNT, STEP_COUNT 값으로 조절 가능). -->
+    <!-- ===== 포트폴리오 (매이슨리 + 더보기 + 확대보기, 순서 그대로) ===== -->
+    <!-- 사진/영상 추가·삭제·교체 방법:
+         - 사진 한 장: <div class="ovi-pf-item"><img src="사진주소" onclick="openOviLightbox(this.src)"></div>
+         - 사진+캡션: img 태그 아래에 <div class="ovi-pf-caption">캡션 글자</div> 추가
+         - 영상(유튜브): <div class="ovi-pf-item"><div class="ovi-pf-video"><iframe src="https://www.youtube.com/embed/영상ID" allowfullscreen></iframe></div></div>
+         순서는 그대로 위에서 아래로 적은 순서를 따라가며, 처음엔 앞부분 일부만 보이고 "더보기"를 누르면 이어서 펼쳐집니다. -->
     <div id="portfolio"></div>
     <div class="ovi-card">
         <div class="ovi-title"><span class="ovi-star">★</span>포트폴리오<span class="ovi-star">★</span></div>
-        <div class="ovi-portfolio-grid" id="oviPortfolioGrid">
-            <img src="여기에_사진주소1">
-            <img src="여기에_사진주소2">
-            <img src="여기에_사진주소3">
-            <img src="여기에_사진주소4">
-            <img src="여기에_사진주소5">
-            <img src="여기에_사진주소6">
-            <img src="여기에_사진주소7">
-            <img src="여기에_사진주소8">
-            <img src="여기에_사진주소9">
-            <img src="여기에_사진주소10">
-            <img src="여기에_사진주소11">
-            <img src="여기에_사진주소12">
+        <div class="ovi-pf-feed" id="oviPortfolioFeed">
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17884565370_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17884565401_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17880765510_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17854673900_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17846108890_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17833279960_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17833279971_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17809947710_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17803011090_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17803011250_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17803011350_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17796008140_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17781442610_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17781442621_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17778063000_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17764899391_Re.jpg"></div>
+            <div class="ovi-pf-item">
+                <img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17517679520_Re.jpg">
+                <div class="ovi-pf-caption">ㄴ웹소설 표지</div>
+            </div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17409033590_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17359158330_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17484313221_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17484313200_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17392652840_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17473232420_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17473232431_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17444449900_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17444450410_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17390849950_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17390849971_Re.jpg"></div>
+            <div class="ovi-pf-item"><div class="ovi-pf-video"><iframe src="https://www.youtube.com/embed/h2fd4KmhJBc" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17381398930_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17372129080_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17476668500_Re.jpg"></div>
+            <div class="ovi-pf-item">
+                <img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17367503330_Re.jpg">
+            </div>
+            <div class="ovi-pf-item">
+                <img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17367503341_Re.jpg">
+                <div class="ovi-pf-caption">ㄴ따로 요청해주시면 숲배너 사이즈로 조정해서 드립니다 ♡</div>
+            </div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17351172000_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17351172011_Re.jpg"></div>
+            <div class="ovi-pf-item"><div class="ovi-pf-video"><iframe src="https://www.youtube.com/embed/0V-gQkV4bRM" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17335718560_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17348795700_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17341608381_Re.jpg"></div>
+            <div class="ovi-pf-item"><div class="ovi-pf-video"><iframe src="https://www.youtube.com/embed/FmNPebAbN8U" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17303960630_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17458259630_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17291538290_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17303752090_Re.jpg"></div>
+            <div class="ovi-pf-item"><img src="https://artmugfile3.cafe24.com/image/up_img/detail/4/goods_43898/17303752111_Re.jpg"></div>
         </div>
         <div class="ovi-more-wrap">
             <button class="ovi-more-btn" id="oviMoreBtn" onclick="oviShowMorePortfolio()">더보기</button>
@@ -326,7 +418,7 @@ html { scroll-behavior: smooth; }
 
         <div class="ovi-calc-total"><span>예상 견적</span><span class="sum" id="oviCalcSum">70,000원</span></div>
         <div class="ovi-calc-caveat">
-            ※ 상업용은 방송용 기본 유형 가격의 2배로 계산되며, 정확한 추가 견적은 별도 문의 바랍니다.<br>
+            ※ 상업용은 기본 유형+기타 옵션을 합한 금액의 2배로 계산되며 (비공개 옵션 제외), 정확한 추가 견적은 별도 문의 바랍니다.<br>
             ※ 표기된 가격은 최소 금액 기준이며, 복잡도에 따라 추가될 수 있습니다. 정확한 견적은 문의 부탁드립니다.
         </div>
     </div>
@@ -404,50 +496,28 @@ html { scroll-behavior: smooth; }
 </div>
 
 <script>
-/* ===== 작업 현황 슬롯 ===== */
-const slotStatus = [
-    '◐',  /* 이번 달 */
-    '○',  /* 다음 달 */
-    '○'   /* 다다음 달 */
-];
-const slotNickname = ['', '', ''];
-
-function renderSlots() {
-    const container = document.getElementById('oviSlotContainer');
-    if(!container) return;
-    const now = new Date();
-    let html = '';
-    for(let i = 0; i < 3; i++) {
-        const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
-        const mName = (d.getMonth() + 1) + '월';
-        const status = slotStatus[i] || '○';
-        const nick = slotNickname[i] || '';
-        const nickHtml = nick ? `<span class="nick">${nick}</span>` : '';
-        html += `<div class="m"><span class="cap">${mName}</span><span class="dotrow">${status}</span>${nickHtml}</div>`;
-    }
-    container.innerHTML = html;
-}
-renderSlots();
-
-/* ===== 포트폴리오: 매이슨리 + 더보기 + 확대보기 ===== */
-const OVI_INITIAL_COUNT = 9;  /* 처음 보여줄 장수 */
-const OVI_STEP_COUNT = 9;     /* 더보기 누를 때마다 추가로 보여줄 장수 */
+/* ===== 포트폴리오: 매이슨리 + 더보기 + 확대보기 (순서 그대로) ===== */
+const OVI_INITIAL_COUNT = 12; /* 처음 보여줄 항목 수 (사진+영상 합산) */
+const OVI_STEP_COUNT = 12;    /* 더보기 누를 때마다 추가로 보여줄 항목 수 */
 
 function initOviPortfolio() {
-    const grid = document.getElementById('oviPortfolioGrid');
+    const feed = document.getElementById('oviPortfolioFeed');
     const moreBtn = document.getElementById('oviMoreBtn');
-    if (!grid) return;
-    const imgs = Array.from(grid.querySelectorAll('img'));
+    if (!feed) return;
+    const items = Array.from(feed.querySelectorAll('.ovi-pf-item'));
 
-    imgs.forEach(function (img, idx) {
-        if (idx >= OVI_INITIAL_COUNT) img.classList.add('ovi-more-hidden');
-        img.addEventListener('click', function () {
-            openOviLightbox(img.getAttribute('src'));
-        });
+    items.forEach(function (item, idx) {
+        if (idx >= OVI_INITIAL_COUNT) item.classList.add('ovi-more-hidden');
+        const img = item.querySelector('img');
+        if (img) {
+            img.addEventListener('click', function () {
+                openOviLightbox(img.getAttribute('src'));
+            });
+        }
     });
 
     function updateMoreBtn() {
-        const hiddenCount = imgs.filter(function (img) { return img.classList.contains('ovi-more-hidden'); }).length;
+        const hiddenCount = items.filter(function (i) { return i.classList.contains('ovi-more-hidden'); }).length;
         if (hiddenCount === 0) {
             moreBtn.classList.add('ovi-hidden');
         } else {
@@ -457,8 +527,8 @@ function initOviPortfolio() {
     }
 
     window.oviShowMorePortfolio = function () {
-        const hidden = imgs.filter(function (img) { return img.classList.contains('ovi-more-hidden'); });
-        hidden.slice(0, OVI_STEP_COUNT).forEach(function (img) { img.classList.remove('ovi-more-hidden'); });
+        const hidden = items.filter(function (i) { return i.classList.contains('ovi-more-hidden'); });
+        hidden.slice(0, OVI_STEP_COUNT).forEach(function (i) { i.classList.remove('ovi-more-hidden'); });
         updateMoreBtn();
     };
 
@@ -476,24 +546,25 @@ function closeOviLightbox() {
 
 /* ===== 실시간 견적 계산기 ===== */
 function oviCalcTotal() {
-    let total = 0;
-    const base = document.querySelector('input[name="oviBase"]:checked');
-    if (base) total += Number(base.getAttribute('data-price'));
+    let base = 0;
+    const baseInput = document.querySelector('input[name="oviBase"]:checked');
+    if (baseInput) base += Number(baseInput.getAttribute('data-price'));
 
-    const commercial = document.getElementById('oviCommercial');
-    if (commercial && commercial.checked) total *= 2;
-
+    let extras = 0;
     const exprQty = document.getElementById('oviExprQty');
-    if (exprQty) total += Number(exprQty.value || 0) * 10000;
-
+    if (exprQty) extras += Number(exprQty.value || 0) * 10000;
     document.querySelectorAll('.ovi-calc-opt input[type="checkbox"][data-price]').forEach(function (cb) {
-        if (cb.checked) total += Number(cb.getAttribute('data-price'));
+        if (cb.checked) extras += Number(cb.getAttribute('data-price'));
     });
 
-    const priv = document.querySelector('input[name="oviPriv"]:checked');
-    if (priv) total += Number(priv.getAttribute('data-price'));
+    let subtotal = base + extras;
+    const commercial = document.getElementById('oviCommercial');
+    if (commercial && commercial.checked) subtotal *= 2;
 
-    document.getElementById('oviCalcSum').textContent = total.toLocaleString() + '원';
+    const priv = document.querySelector('input[name="oviPriv"]:checked');
+    if (priv) subtotal += Number(priv.getAttribute('data-price'));
+
+    document.getElementById('oviCalcSum').textContent = subtotal.toLocaleString() + '원';
 }
 oviCalcTotal();
 
