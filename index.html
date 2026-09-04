@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>오브 - Illustration Commission</title>
+<style>
+/* 무료 공개 CDN(jsDelivr)에 이미 올라가 있는 폰트라 파일 업로드 없이 바로 사용 가능 */
+@font-face {
+    font-family: 'Paperlogy';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-6SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+.ovi {
+    --accent: #d98c3d;
+    --pink-deep: #e08a5c;
+    --ink: #4a3f38;
+    --sub: #8a7b70;
+    font-family: "Paperlogy", "Noto Sans KR", sans-serif;
+    font-weight: 500;
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 40px 20px 80px 20px;
+    background: linear-gradient(180deg, #fff8ef 0%, #fff0dc 55%, #ffe4bd 100%);
+    color: var(--ink);
+    box-sizing: border-box;
+}
+.ovi * { box-sizing: border-box; }
+.ovi img { max-width: 100%; display: block; }
+html { scroll-behavior: smooth; }
+
+.ovi-star { color: var(--accent); font-size: 0.85em; margin: 0 7px; }
+
+/* ===== 공통 카드 ===== */
+.ovi-card {
+    background: #fffdfb;
+    border-radius: 20px;
+    box-shadow: 0 8px 24px rgba(190, 130, 70, 0.09);
+    padding: 32px 36px;
+    margin-bottom: 28px;
+}
+.ovi-title {
+    text-align: center;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 0 0 22px 0;
+    letter-spacing: 0.2px;
+}
+
+/* ===== 상단 안내 문구 ===== */
+.ovi-intro {
+    text-align: center;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--sub);
+    line-height: 1.8;
+    margin-bottom: 28px;
+    padding: 0 10px;
+}
+
+/* ===== 작업 현황 ===== */
+.ovi-legend { text-align: center; font-size: 12.5px; color: var(--sub); margin-bottom: 22px; }
+.ovi-legend span { margin: 0 14px; }
+.ovi-legend .circle { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px; vertical-align:middle; position:relative; top:-1px; }
+.ovi-legend .empty { border: 1.5px solid #ecc99a; }
+.ovi-legend .wait  { border: 1.5px solid var(--accent); box-shadow: inset 0 0 0 2px #fff, inset 0 0 0 3.5px var(--accent); }
+.ovi-legend .done  { background: var(--accent); }
+.ovi-month { display:flex; justify-content:center; gap:50px; flex-wrap:wrap; }
+.ovi-month .m { text-align:center; font-size:12.5px; font-weight:600; }
+.ovi-month .m .cap { display:block; margin-bottom:8px; font-size:13.5px; font-weight:700; }
+.ovi-month .m .dotrow { font-size:17px; letter-spacing:5px; color: var(--accent); }
+.ovi-month .m .nick { display:block; margin-top:6px; font-size:11.5px; font-weight:600; color: var(--sub); }
+
+/* ===== 공지사항 ===== */
+.ovi-list { list-style:none; margin:0; padding:0; text-align:left; }
+.ovi-list li {
+    position: relative; padding: 10px 0 10px 20px;
+    font-size: 13px; font-weight: 500; color: var(--sub);
+    border-bottom: 1px dashed #f0e2d2; line-height: 1.6;
+}
+.ovi-list li:last-child { border-bottom: none; }
+.ovi-list li::before { content: "★"; position:absolute; left:0; top:10px; color: var(--accent); font-size: 11px; }
+.ovi-list b { color: var(--pink-deep); font-weight: 700; }
+.ovi-warn {
+    margin-top: 14px; padding-top: 14px; border-top: 1px dashed #f0e2d2;
+    text-align:center; font-size:12.5px; font-weight:700; color: var(--pink-deep); line-height:1.7;
+}
+
+/* ===== 작업 순서 ===== */
+.ovi-steps { display:flex; justify-content:space-between; gap:8px; flex-wrap:wrap; margin-bottom: 22px; }
+.ovi-step { flex:1 1 110px; text-align:center; background:#fff9f2; border:1px solid #ffe4c4; border-radius:14px; padding:16px 8px; }
+.ovi-step .num { width:28px; height:24px; line-height:24px; border-radius:12px; background:var(--accent); color:#fff; font-weight:700; font-size:11px; margin:0 auto 8px auto; }
+.ovi-step .label { font-weight:700; font-size:12.5px; margin-bottom:0; }
+.ovi-note { font-size: 12px; color: var(--sub); line-height: 1.8; text-align:left; padding-top: 10px; border-top: 1px dashed #f0e2d2; }
+.ovi-note b { color: var(--pink-deep); font-weight: 700; }
+
+/* ===== 포트폴리오 (매이슨리 + 더보기) ===== */
+.ovi-portfolio-grid {
+    column-count: 2;
+    column-gap: 14px;
+}
+@media (min-width: 640px) {
+    .ovi-portfolio-grid { column-count: 3; }
+}
+.ovi-portfolio-grid img {
+    width: 100%;
+    margin-bottom: 14px;
+    border-radius: 12px;
+    break-inside: avoid;
+    box-shadow: 0 3px 12px rgba(190,130,70,0.12);
+    cursor: zoom-in;
+    background:#fdf6ec;
+    transition: opacity 0.2s ease;
+}
+.ovi-portfolio-grid img.ovi-more-hidden { display: none; }
+.ovi-more-wrap { text-align:center; margin-top: 6px; }
+.ovi-more-btn {
+    display:inline-block;
+    background:#fff9f2;
+    border:1px solid #ffe4c4;
+    color: var(--pink-deep);
+    font-weight:700;
+    font-size:13px;
+    padding:10px 28px;
+    border-radius:30px;
+    cursor:pointer;
+    font-family: inherit;
+}
+.ovi-more-btn:active { transform: scale(0.97); }
+.ovi-more-btn.ovi-hidden { display:none; }
+
+/* 사진 확대보기 */
+.ovi-lb-modal {
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    align-items:center;
+    justify-content:center;
+    padding:30px;
+    box-sizing:border-box;
+    background:rgba(30,20,10,0.85);
+}
+.ovi-lb-modal.open { display:flex; }
+.ovi-lb-modal img { max-width:92vw; max-height:90vh; border-radius:10px; }
+.ovi-lb-modal .ovi-lb-close { position:fixed; top:18px; right:26px; color:#fff; font-size:30px; z-index:3; cursor:pointer; font-weight:300; }
+
+/* ===== 실시간 견적 ===== */
+.ovi-calc-group-title { font-size:12.5px; font-weight:700; color: var(--pink-deep); margin: 18px 0 6px 0; }
+.ovi-calc-group-title:first-of-type { margin-top: 0; }
+.ovi-calc-sub { font-size:11px; color:var(--sub); margin: -2px 0 4px 2px; }
+.ovi-calc-opt {
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 4px; border-bottom:1px dashed #f0e2d2; font-size:13px; font-weight:600;
+}
+.ovi-calc-opt label { display:flex; align-items:center; gap:9px; cursor:pointer; }
+.ovi-calc-opt input[type="checkbox"],
+.ovi-calc-opt input[type="radio"] { width:16px; height:16px; accent-color: var(--accent); cursor:pointer; flex-shrink:0; }
+.ovi-calc-opt .price { color: var(--accent); font-weight:700; white-space:nowrap; }
+.ovi-calc-opt .stepper { display:flex; align-items:center; gap:6px; }
+.ovi-calc-opt .stepper input[type="number"] {
+    width:44px; text-align:center; border:1px solid #eddccb; border-radius:8px; padding:3px 2px; font-size:12.5px; font-family:inherit;
+}
+.ovi-calc-total { margin-top:18px; background:#fff3e6; border-radius:14px; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; font-size:14.5px; font-weight:700; }
+.ovi-calc-total .sum { font-size:20px; color: var(--accent); }
+.ovi-calc-caveat { font-size:11px; color: var(--sub); margin-top:8px; line-height:1.6; }
+
+/* ===== 문의 양식 ===== */
+.ovi-form-box { text-align:left; background:#fff9f2; border:1px solid #ffe4c4; border-radius:16px; padding:22px 24px; }
+.ovi-fld { margin-bottom: 16px; }
+.ovi-fld:last-child { margin-bottom: 0; }
+.ovi-fld .q { font-size:13px; font-weight:700; margin-bottom:6px; }
+.ovi-fld .sub { color: var(--sub); font-weight:500; font-size:11.5px; margin-left:4px; }
+.ovi-fld input[type="text"], .ovi-fld textarea {
+    width:100%; border:1px solid #eddccb; border-radius:10px; padding:9px 12px;
+    font-family: inherit; font-size:12.5px; color: var(--ink); background:#fff; resize:vertical;
+}
+.ovi-fld textarea { min-height: 56px; }
+.ovi-check-row { display:flex; gap:16px; flex-wrap:wrap; }
+.ovi-check-row label { display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; cursor:pointer; }
+.ovi-check-row input { accent-color: var(--accent); width:15px; height:15px; }
+.ovi-copy-btn {
+    display:block; margin:18px auto 0 auto; background: var(--accent); color:#fff; font-weight:700;
+    font-size:13px; padding:10px 26px; border-radius:30px; cursor:pointer; border:none;
+}
+.ovi-copy-btn:active { transform: scale(0.97); }
+</style>
+</head>
+<body>
+
+<div class="ovi">
+
+    <!-- ===== 상단 안내 문구 ===== -->
+    <div class="ovi-intro">
+        해당 타입은 간단 타입의 커미션으로 조금 러프하게, 복잡한 디자인은 생략되어 작업됩니다.<br>
+        방송용 혹은 커버곡 일러스트로 쓰일 빠르고 저렴한 그림을 찾고 계시는 분께 추천드립니다!😊
+    </div>
+
+    <!-- ===== 작업 현황 ===== -->
+    <div id="work"></div>
+    <div class="ovi-card">
+        <div class="ovi-title"><span class="ovi-star">★</span>작업 현황<span class="ovi-star">★</span></div>
+        <div class="ovi-legend">
+            <span><span class="circle empty"></span>비었음</span>
+            <span><span class="circle wait"></span>예약 / 대기중</span>
+            <span><span class="circle done"></span>마감 / 작업중</span>
+        </div>
+        <!-- 자동으로 현재 달부터 3개월이 계산되어 표시됩니다 -->
+        <div class="ovi-month" id="oviSlotContainer">
+            <!-- 자바스크립트에 의해 자동 생성됩니다 -->
+        </div>
+    </div>
+
+    <!-- ===== 공지사항 ===== -->
+    <div id="notice"></div>
+    <div class="ovi-card">
+        <div class="ovi-title"><span class="ovi-star">★</span>공지사항<span class="ovi-star">★</span></div>
+        <ul class="ovi-list">
+            <li>모든 커미션 작업물에 대한 <b>저작권은 오브(본인)</b>에게 있음을 알립니다.</li>
+            <li>작업기간은 <b>두상&흉상-7일 / 반신&전신-14일 / 2인 이상-14일</b> 소요됩니다.</li>
+            <li>인원 추가시 <b>기본가격 × n명</b>으로 계산됩니다.</li>
+            <li>구도 오마카세 신청시 <b>1차 컨펌 단계에서도 큰 형태의 포즈 수정은 불가능</b>합니다.</li>
+            <li>모든 작업물은 SNS 게시용·포트폴리오 등으로 사용될 수 있습니다.</li>
+            <li><b>R-18·고어·중년 및 노년</b>은 본인 역량에 부족하다 생각하여 받지 않습니다. (그 외에도 작가 본인이 소화하기 힘들다 판단할 경우에도 거절할 수 있습니다.)</li>
+            <li>문의시 <b>기본적인 예의는 반드시 지켜주세요.</b> 예의를 지키지 않는 분들의 작업 의뢰는 거절합니다.</li>
+            <li>빠른마감은 작업 일정에 따라 불가능 할 수도 있습니다. (가격 및 가능여부 따로 문의 부탁드립니다!)</li>
+        </ul>
+        <div class="ovi-warn">위 주의사항을 읽지 않은 후 발생하는 일에 대해서는 책임을 지지 않습니다.</div>
+    </div>
+
+    <!-- ===== 작업 순서 ===== -->
+    <div id="order"></div>
+    <div class="ovi-card">
+        <div class="ovi-title"><span class="ovi-star">★</span>작업 순서<span class="ovi-star">★</span></div>
+        <div class="ovi-steps">
+            <div class="ovi-step"><div class="num">01</div><div class="label">문의</div></div>
+            <div class="ovi-step"><div class="num">02</div><div class="label">결제</div></div>
+            <div class="ovi-step"><div class="num">03</div><div class="label">선화 러프</div></div>
+            <div class="ovi-step"><div class="num">04</div><div class="label">1차 컨펌</div></div>
+            <div class="ovi-step"><div class="num">05</div><div class="label">완성</div></div>
+            <div class="ovi-step"><div class="num">06</div><div class="label">2차 컨펌</div></div>
+            <div class="ovi-step"><div class="num">07</div><div class="label">완료</div></div>
+        </div>
+        <div class="ovi-note">
+            <b>1차 컨펌</b> 단계에서만 큰 형태의 수정이 가능합니다. <b>2차 컨펌</b> 단계에서는 작은 형태의 수정만 가능합니다.<br><br>
+            오브젝트 추가 및 장식 추가는 1차 단계에서 부탁드립니다. 2차 컨펌 단계(완성)에서 요청하실 시 <b>추가금이 발생</b>합니다.<br>
+            (오브젝트나 장식 등이 복잡하거나 작업에 어려움이 있을 시 1차 컨펌 단계에서도 추가금이 발생할 수 있습니다)<br><br>
+            원활한 수정과 빠른 작업을 위해 1차 컨펌 단계에서 명확하게 말씀해주시면 감사하겠습니다.
+        </div>
+    </div>
+
+    <!-- ===== 포트폴리오 (매이슨리 그리드 + 더보기 + 확대보기) ===== -->
+    <!-- 사진 추가/삭제/교체 방법: 아래 .ovi-portfolio-grid 안에 <img src="사진주소"> 한 줄씩만 있으면 됩니다.
+         사진 사이즈가 제각각이어도 자동으로 자연스럽게 배치돼요.
+         처음엔 9장만 보이고 "더보기"를 누르면 다음 9장씩 펼쳐집니다 (INITIAL_COUNT, STEP_COUNT 값으로 조절 가능). -->
+    <div id="portfolio"></div>
+    <div class="ovi-card">
+        <div class="ovi-title"><span class="ovi-star">★</span>포트폴리오<span class="ovi-star">★</span></div>
+        <div class="ovi-portfolio-grid" id="oviPortfolioGrid">
+            <img src="여기에_사진주소1">
+            <img src="여기에_사진주소2">
+            <img src="여기에_사진주소3">
+            <img src="여기에_사진주소4">
+            <img src="여기에_사진주소5">
+            <img src="여기에_사진주소6">
+            <img src="여기에_사진주소7">
+            <img src="여기에_사진주소8">
+            <img src="여기에_사진주소9">
+            <img src="여기에_사진주소10">
+            <img src="여기에_사진주소11">
+            <img src="여기에_사진주소12">
+        </div>
+        <div class="ovi-more-wrap">
+            <button class="ovi-more-btn" id="oviMoreBtn" onclick="oviShowMorePortfolio()">더보기</button>
+        </div>
+    </div>
+
+    <!-- ===== 실시간 견적서 ===== -->
+    <div id="calc"></div>
+    <div class="ovi-card">
+        <div class="ovi-title"><span class="ovi-star">★</span>실시간 견적서<span class="ovi-star">★</span></div>
+
+        <div class="ovi-calc-group-title">① 방송용 (커버곡) — 기본 유형 (필수 선택)</div>
+        <div class="ovi-calc-opt">
+            <label><input type="radio" name="oviBase" value="70000" data-price="70000" checked oninput="oviCalcTotal(this)"> 두상 (~어깨)</label>
+            <span class="price">70,000원</span>
+        </div>
+        <div class="ovi-calc-opt">
+            <label><input type="radio" name="oviBase" data-price="90000" oninput="oviCalcTotal(this)"> 흉상 (~허리&골반)</label>
+            <span class="price">90,000원</span>
+        </div>
+        <div class="ovi-calc-opt">
+            <label><input type="radio" name="oviBase" data-price="130000" oninput="oviCalcTotal(this)"> 반신 (~허벅지)</label>
+            <span class="price">130,000원</span>
+        </div>
+        <div class="ovi-calc-opt">
+            <label><input type="radio" name="oviBase" data-price="150000" oninput="oviCalcTotal(this)"> 전신 <span class="sub">(구도에 따라 전신이 모두 나오지 않을 수 있습니다)</span></label>
+            <span class="price">150,000원</span>
+        </div>
+
+        <div class="ovi-calc-group-title">② 상업용 여부</div>
+        <div class="ovi-calc-opt">
+            <label><input type="checkbox" id="oviCommercial" oninput="oviCalcTotal(this)"> 상업용 (방송용 견적의 2배 가격)</label>
+            <span class="price">×2</span>
+        </div>
+        <div class="ovi-calc-sub">※ 추가금은 별도 문의 바랍니다.</div>
+
+        <div class="ovi-calc-group-title">③ 기타</div>
+        <div class="ovi-calc-opt">
+            <span>표정 추가 (개당 10,000원)</span>
+            <span class="stepper"><input type="number" id="oviExprQty" min="0" value="0" oninput="oviCalcTotal(this)"> 개</span>
+        </div>
+        <div class="ovi-calc-opt"><label><input type="checkbox" data-price="10000" oninput="oviCalcTotal(this)"> 복잡한 디자인·소품 추가 <span class="sub">(10,000~)</span></label><span class="price">10,000원~</span></div>
+        <div class="ovi-calc-opt"><label><input type="checkbox" data-price="40000" oninput="oviCalcTotal(this)"> 배경 추가 <span class="sub">(40,000~70,000)</span></label><span class="price">40,000원~</span></div>
+        <div class="ovi-calc-opt"><label><input type="checkbox" data-price="30000" oninput="oviCalcTotal(this)"> Live2D 파츠 분리 <span class="sub">(문의 바랍니다, 30,000~)</span></label><span class="price">30,000원~</span></div>
+        <div class="ovi-calc-opt"><label><input type="checkbox" data-price="10000" oninput="oviCalcTotal(this)"> 오마카세 추가비용 <span class="sub">(10,000~)</span></label><span class="price">10,000원~</span></div>
+
+        <div class="ovi-calc-group-title">④ 비공개 여부</div>
+        <div class="ovi-calc-opt"><label><input type="radio" name="oviPriv" value="none" data-price="0" checked oninput="oviCalcTotal(this)"> 공개 (기본)</label><span class="price">0원</span></div>
+        <div class="ovi-calc-opt"><label><input type="radio" name="oviPriv" data-price="20000" oninput="oviCalcTotal(this)"> 비공개 <span class="sub">(최대 10일)</span></label><span class="price">20,000원</span></div>
+        <div class="ovi-calc-opt"><label><input type="radio" name="oviPriv" data-price="70000" oninput="oviCalcTotal(this)"> 영구 비공개</label><span class="price">70,000원</span></div>
+
+        <div class="ovi-calc-total"><span>예상 견적</span><span class="sum" id="oviCalcSum">70,000원</span></div>
+        <div class="ovi-calc-caveat">
+            ※ 상업용은 방송용 기본 유형 가격의 2배로 계산되며, 정확한 추가 견적은 별도 문의 바랍니다.<br>
+            ※ 표기된 가격은 최소 금액 기준이며, 복잡도에 따라 추가될 수 있습니다. 정확한 견적은 문의 부탁드립니다.
+        </div>
+    </div>
+
+    <!-- ===== 문의 양식 (입력 + 복사) ===== -->
+    <div id="inquiry"></div>
+    <div class="ovi-card">
+        <div class="ovi-title"><span class="ovi-star">★</span>문의 양식<span class="ovi-star">★</span></div>
+        <div class="ovi-form-box">
+            <div class="ovi-fld">
+                <div class="q">1. 활동명 <span class="sub">(닉네임, SNS 계정 등)</span></div>
+                <input type="text" id="oviQ1" placeholder="입력해주세요">
+            </div>
+            <div class="ovi-fld">
+                <div class="q">2. 유형</div>
+                <div class="ovi-check-row">
+                    <label><input type="checkbox" id="oviQ2a"> 두상</label>
+                    <label><input type="checkbox" id="oviQ2b"> 흉상</label>
+                    <label><input type="checkbox" id="oviQ2c"> 반신</label>
+                    <label><input type="checkbox" id="oviQ2d"> 전신</label>
+                </div>
+            </div>
+            <div class="ovi-fld">
+                <div class="q">3. 방송용 / 상업용</div>
+                <div class="ovi-check-row">
+                    <label><input type="checkbox" id="oviQ3a"> 방송용(커버곡)</label>
+                    <label><input type="checkbox" id="oviQ3b"> 상업용</label>
+                </div>
+            </div>
+            <div class="ovi-fld">
+                <div class="q">4. 캐릭터 설명 <span class="sub">(성별/헤어/눈동자/의상/분위기 등 최대한 자세히)</span></div>
+                <textarea id="oviQ4" placeholder="입력해주세요"></textarea>
+            </div>
+            <div class="ovi-fld">
+                <div class="q">5. 참고 자료 <span class="sub">(레퍼런스 링크나 설명)</span></div>
+                <textarea id="oviQ5" placeholder="입력해주세요"></textarea>
+            </div>
+            <div class="ovi-fld">
+                <div class="q">6. 기타 요청 / 질문 사항</div>
+                <textarea id="oviQ6" placeholder="입력해주세요"></textarea>
+            </div>
+        </div>
+        <textarea id="oviFormText" style="position:absolute; left:-9999px;"></textarea>
+        <button class="ovi-copy-btn" onclick="
+            var type=[];
+            if(document.getElementById('oviQ2a').checked)type.push('두상');
+            if(document.getElementById('oviQ2b').checked)type.push('흉상');
+            if(document.getElementById('oviQ2c').checked)type.push('반신');
+            if(document.getElementById('oviQ2d').checked)type.push('전신');
+            var use=[];
+            if(document.getElementById('oviQ3a').checked)use.push('방송용(커버곡)');
+            if(document.getElementById('oviQ3b').checked)use.push('상업용');
+            var out = '1. 활동명 : ' + document.getElementById('oviQ1').value + '\n' +
+                      '2. 유형 : ' + type.join(', ') + '\n' +
+                      '3. 방송용/상업용 : ' + use.join(', ') + '\n' +
+                      '4. 캐릭터 설명 : ' + document.getElementById('oviQ4').value + '\n' +
+                      '5. 참고 자료 : ' + document.getElementById('oviQ5').value + '\n' +
+                      '6. 기타 요청/질문 사항 : ' + document.getElementById('oviQ6').value;
+            var t=document.getElementById('oviFormText');
+            t.value = out;
+            t.style.position='fixed'; t.style.left='0'; t.select();
+            try{document.execCommand('copy');}catch(e){}
+            t.style.position='absolute'; t.style.left='-9999px';
+            this.textContent='복사 완료!'; var b=this;
+            setTimeout(function(){b.textContent='입력한 내용 복사하기';},1500);
+        ">입력한 내용 복사하기</button>
+    </div>
+
+</div>
+
+<!-- 사진 확대보기 창 -->
+<div id="ovi-lightbox" class="ovi-lb-modal" onclick="closeOviLightbox()">
+    <span class="ovi-lb-close" onclick="closeOviLightbox()">&times;</span>
+    <img id="ovi-lightbox-img" src="" alt="확대 이미지">
+</div>
+
+<script>
+/* ===== 작업 현황 슬롯 ===== */
+const slotStatus = [
+    '◐',  /* 이번 달 */
+    '○',  /* 다음 달 */
+    '○'   /* 다다음 달 */
+];
+const slotNickname = ['', '', ''];
+
+function renderSlots() {
+    const container = document.getElementById('oviSlotContainer');
+    if(!container) return;
+    const now = new Date();
+    let html = '';
+    for(let i = 0; i < 3; i++) {
+        const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
+        const mName = (d.getMonth() + 1) + '월';
+        const status = slotStatus[i] || '○';
+        const nick = slotNickname[i] || '';
+        const nickHtml = nick ? `<span class="nick">${nick}</span>` : '';
+        html += `<div class="m"><span class="cap">${mName}</span><span class="dotrow">${status}</span>${nickHtml}</div>`;
+    }
+    container.innerHTML = html;
+}
+renderSlots();
+
+/* ===== 포트폴리오: 매이슨리 + 더보기 + 확대보기 ===== */
+const OVI_INITIAL_COUNT = 9;  /* 처음 보여줄 장수 */
+const OVI_STEP_COUNT = 9;     /* 더보기 누를 때마다 추가로 보여줄 장수 */
+
+function initOviPortfolio() {
+    const grid = document.getElementById('oviPortfolioGrid');
+    const moreBtn = document.getElementById('oviMoreBtn');
+    if (!grid) return;
+    const imgs = Array.from(grid.querySelectorAll('img'));
+
+    imgs.forEach(function (img, idx) {
+        if (idx >= OVI_INITIAL_COUNT) img.classList.add('ovi-more-hidden');
+        img.addEventListener('click', function () {
+            openOviLightbox(img.getAttribute('src'));
+        });
+    });
+
+    function updateMoreBtn() {
+        const hiddenCount = imgs.filter(function (img) { return img.classList.contains('ovi-more-hidden'); }).length;
+        if (hiddenCount === 0) {
+            moreBtn.classList.add('ovi-hidden');
+        } else {
+            moreBtn.classList.remove('ovi-hidden');
+            moreBtn.textContent = '더보기 (+' + Math.min(OVI_STEP_COUNT, hiddenCount) + ')';
+        }
+    }
+
+    window.oviShowMorePortfolio = function () {
+        const hidden = imgs.filter(function (img) { return img.classList.contains('ovi-more-hidden'); });
+        hidden.slice(0, OVI_STEP_COUNT).forEach(function (img) { img.classList.remove('ovi-more-hidden'); });
+        updateMoreBtn();
+    };
+
+    updateMoreBtn();
+}
+initOviPortfolio();
+
+function openOviLightbox(src) {
+    document.getElementById('ovi-lightbox-img').src = src;
+    document.getElementById('ovi-lightbox').classList.add('open');
+}
+function closeOviLightbox() {
+    document.getElementById('ovi-lightbox').classList.remove('open');
+}
+
+/* ===== 실시간 견적 계산기 ===== */
+function oviCalcTotal() {
+    let total = 0;
+    const base = document.querySelector('input[name="oviBase"]:checked');
+    if (base) total += Number(base.getAttribute('data-price'));
+
+    const commercial = document.getElementById('oviCommercial');
+    if (commercial && commercial.checked) total *= 2;
+
+    const exprQty = document.getElementById('oviExprQty');
+    if (exprQty) total += Number(exprQty.value || 0) * 10000;
+
+    document.querySelectorAll('.ovi-calc-opt input[type="checkbox"][data-price]').forEach(function (cb) {
+        if (cb.checked) total += Number(cb.getAttribute('data-price'));
+    });
+
+    const priv = document.querySelector('input[name="oviPriv"]:checked');
+    if (priv) total += Number(priv.getAttribute('data-price'));
+
+    document.getElementById('oviCalcSum').textContent = total.toLocaleString() + '원';
+}
+oviCalcTotal();
+
+/* ===== iframe 높이 자동 조절 + 부모 페이지 스크롤 위치 전달 ===== */
+window.addEventListener('message', function (event) {
+    const data = event.data;
+    if (!data || data.type !== 'ovi-scroll' || !data.target) return;
+    const target = document.getElementById(data.target);
+    if (!target) return;
+    const offsetInFrame = target.getBoundingClientRect().top + window.scrollY;
+    window.parent.postMessage({ type: 'ovi-scroll-parent', top: offsetInFrame }, '*');
+});
+
+function sendHeight() {
+    window.parent.postMessage({ type: 'ovi-height', height: document.body.scrollHeight }, '*');
+}
+window.onload = function () {
+    sendHeight();
+    setTimeout(sendHeight, 500);
+};
+new ResizeObserver(sendHeight).observe(document.body);
+</script>
+</body>
+</html>
